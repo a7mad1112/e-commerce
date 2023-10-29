@@ -56,3 +56,9 @@ export const updateCategory = async (req, res) => {
   await category.save();
   return res.json({ msg: 'Success', category });
 }
+
+export const getActiveCategories = async (req, res) => {
+  const categories = await categoryModel.find({ status: "Active" }).select('name image');
+  return res.status(200).json({ msg: 'Success', categories });
+  // return res.json("here")
+}
