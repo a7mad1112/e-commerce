@@ -5,7 +5,13 @@ import categoryModel from './../../../db/models/category.model.js';
 export const getCategories = async (req, res) => {
   const categories = await categoryModel.find();
   return res.status(200).json({ msg: 'Success', categories });
-}
+};
+
+export const getSpecficCategory = async (req, res) => {
+  const { id } = req.params;
+  const category = await categoryModel.findById(id);
+  return res.json({ msg: "Success", category });
+};
 
 export const createCategory = async (req, res) => {
   const name = req.body.name.toLowerCase();
@@ -20,4 +26,4 @@ export const createCategory = async (req, res) => {
     }
   });
   return res.status(201).json({ msg: 'Success', category: category });
-}
+};
