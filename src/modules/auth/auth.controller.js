@@ -18,3 +18,19 @@ export const signup = async (req, res) => {
   });
   return res.status(201).json({ msg: "Success", user: createdUser });
 };
+
+export const signin = async (req, res) => {
+  const { body: { email, password } } = req;
+  const user = await userModel.findOne({ email });
+  if (!user) {
+    return res.status(404).json({ msg: "User not found" });
+  }
+  const match = await bcrypt.compare(password, user.password);
+
+  if (!match) {
+    return res.status(404).json({ msg: "User not found" });
+  }
+
+
+  return res.status(200).json({ msg: "Success", user });
+}
