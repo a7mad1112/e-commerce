@@ -8,5 +8,5 @@ const PORT = process.env.PORT || 4000
 initApp(app, express)
 
 app.listen(PORT, () => {
-  console.log("Server is runngin on port: " + PORT)
+  console.log("Server is running on port: " + PORT)
 })
