@@ -1,3 +1,4 @@
+import categoryModel from '../../../db/models/category.model.js';
 import subCategoryModel from './../../../db/models/subcategory.model.js';
 import cloudinary from './../../services/cloudinary.js';
 export const createSubCategory = async (req, res) => {
@@ -17,3 +18,15 @@ export const createSubCategory = async (req, res) => {
   return res.status(201).json({ msg: "Success", subCategory });
 
 };
+
+export const getSubCategories = async (req, res) => {
+  const categoryId = req.params.id;
+  const category = await categoryModel.findById(categoryId);
+  if (!category) {
+    return res.status(404).json({ msg: "Category not found" });
+  }
+  const subCategories = await subCategoryModel.find({ categoryId }).populate({
+    path: 'categoryId'
+  });
+  return res.status(200).json({ msg: 'Success', subCategories });
+}
