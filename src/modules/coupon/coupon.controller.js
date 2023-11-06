@@ -41,3 +41,15 @@ export const softDelete = async (req, res) => {
   }
   return res.status(200).json({ msg: "Success" });
 }
+export const restore = async (req, res) => {
+  const { id: _id } = req.params;
+  const coupon = await couponModel.findOneAndUpdate({ _id, isDeleted: true },
+    {
+      isDeleted: false,
+    },
+    { new: true });
+  if (!coupon) {
+    return res.status(400).json({ msg: "Cannot restore this coupon" });
+  }
+  return res.status(200).json({ msg: "Success" });
+}

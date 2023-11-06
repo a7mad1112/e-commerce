@@ -6,4 +6,5 @@ router.post('/', couponController.createCoupon)
 router.get('/', couponController.getCoupons)
 router.put('/:id', couponController.updateCoupon)
 router.patch('/soft-delete/:id', couponController.softDelete)
+router.patch('/restore/:id', couponController.restore)
 export default router;
