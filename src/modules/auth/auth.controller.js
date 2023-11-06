@@ -37,7 +37,7 @@ export const signin = async (req, res) => {
   },
     process.env.LOGIN_SECRET_KEY, { expiresIn: '5m' });
 
-  const refreshToekn = jwt.jwt.sign({
+  const refreshToekn = jwt.sign({
     id: user._id, role: user.role, status: user.status
   },
     process.env.LOGIN_SECRET_KEY, { expiresIn: 60 * 60 * 24 * 30 });
