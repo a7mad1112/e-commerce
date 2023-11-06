@@ -7,7 +7,7 @@ export const createCoupon = async (req, res) => {
   return res.status(201).json({ msg: "Success", coupon });
 };
 export const getCoupons = async (req, res) => {
-  const coupons = await couponModel.find({});
+  const coupons = await couponModel.find({ isDeleted: false });
   return res.status(200).json({ msg: "Success", coupons });
 }
 export const updateCoupon = async (req, res) => {
@@ -28,4 +28,16 @@ export const updateCoupon = async (req, res) => {
   }
   await coupon.save();
   return res.status(200).json({ msg: "Success", coupon });
+}
+export const softDelete = async (req, res) => {
+  const { id: _id } = req.params;
+  const coupon = await couponModel.findOneAndUpdate({ _id, isDeleted: false },
+    {
+      isDeleted: true,
+    },
+    { new: true });
+  if (!coupon) {
+    return res.status(400).json({ msg: "Cannot delete this coupon" });
+  }
+  return res.status(200).json({ msg: "Success" });
 }
