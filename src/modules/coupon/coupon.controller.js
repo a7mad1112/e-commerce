@@ -53,3 +53,11 @@ export const restore = async (req, res) => {
   }
   return res.status(200).json({ msg: "Success" });
 }
+export const hardDelete = async (req, res) => {
+  const { id: _id } = req.params;
+  const coupon = await couponModel.findOneAndDelete({ _id })
+  if (!coupon) {
+    return res.status(400).json({ msg: "Cannot delete this coupon" });
+  }
+  return res.status(200).json({ msg: "Success" });
+}
