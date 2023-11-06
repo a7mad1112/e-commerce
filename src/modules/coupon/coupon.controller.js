@@ -6,3 +6,7 @@ export const createCoupon = async (req, res) => {
   const coupon = await couponModel.create(req.body);
   return res.status(201).json({ msg: "Success", coupon });
 };
+export const getCoupons = async (req, res) => {
+  const coupons = await couponModel.find({});
+  return res.status(200).json({ msg: "Success", coupons });
+}
