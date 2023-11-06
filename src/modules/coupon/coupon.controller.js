@@ -1,0 +1,1 @@
+export const createCoupon = (req, res) => res.json("sdaf");
