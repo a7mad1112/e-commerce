@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-export const auth = () => {
+export const auth = (accessRoles = []) => {
   return (req, res, next) => {
     const { BEARAR_KEY, LOGIN_SECRET_KEY } = process.env;
     const { authorization } = req.headers;
@@ -11,8 +11,8 @@ export const auth = () => {
     if (!decoded) {
       return res.status(400).json({ msg: "Invalid authorization" });
     }
-    if(decoded.role === "User"){
-      return res.status(403).json("Not auth user");
+    if (!accessRoles.includes(decoded.role)) {
+      return res.status(403).json({ msg: "Not auth user" });
     }
     next();
   }

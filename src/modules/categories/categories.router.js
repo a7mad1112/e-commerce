@@ -6,8 +6,8 @@ import { auth } from '../../middleware/auth.middleware.js';
 const router = Router();
 
 router.use("/:id/subcategory", subCategoryRouter)
-router.get('/', auth(), categoriesContoller.getCategories);
-router.get('/active', categoriesContoller.getActiveCategories);
+router.get('/', auth(["Admin"]), categoriesContoller.getCategories);
+router.get('/active', auth(["User", "Admin"]), categoriesContoller.getActiveCategories);
 router.get('/:id', categoriesContoller.getSpecficCategory);
 router.post('/', fileUpload(fileValidation.image).single('image'),
   categoriesContoller.createCategory);
