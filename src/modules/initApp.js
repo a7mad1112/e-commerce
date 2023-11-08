@@ -4,8 +4,9 @@ import connectDB from '../../db/connection.js'
 import authRouter from '../modules/auth/auth.router.js'
 import subCategoryRouter from './subcategory/subcategory.router.js'
 import couponRouter from './coupon/coupon.router.js'
+import { sendEmail } from '../services/email.js'
 
-const initApp = (app, express) => {
+const initApp = async (app, express) => {
   connectDB()
   app.use(express.json())
   app.use('/products', productsRouter)

@@ -15,7 +15,7 @@ const couponSchema = new Schema({
   isDeleted: {
     type: Boolean,
     default: false,
-  }
+  },
   // createdBy: {
   //   type: Types.ObjectId.ref('User')
   // },
