@@ -20,7 +20,7 @@ export const signup = async (req, res) => {
   },
     process.env.EMAIL_SECRET_KEY, { expiresIn: '5m' });
 
-  await sendEmail(email, "Email Confirmation", `<a href='http://localhost:${process.env.PORT}/auth/confirm-email/${token}'>Hello, confirm your email!</a>`)
+  await sendEmail(email, "Email Confirmation", `<a href='${req.protocol}://${req.headers.host}/auth/confirm-email/${token}'>Hello, confirm your email!</a>`)
 
   const createdUser = await userModel.create({
     userName, email, password: hashedPassword, image: { secure_url, public_id }
