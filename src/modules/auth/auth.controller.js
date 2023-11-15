@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import cloudinary from './../../services/cloudinary.js';
 import jwt from "jsonwebtoken";
 import { sendEmail } from "../../services/email.js";
+import { customAlphabet } from 'nanoid'
 export const signup = async (req, res) => {
   const { body: { userName, email, password }, file } = req;
   const user = await userModel.findOne({ email });
@@ -65,3 +66,14 @@ export const confirmEmail = async (req, res) => {
   }
   return res.status(200).json({ msg: "Your email is verified" })
 }
+
+export const sendCode = async (req, res) => {
+  const { email } = req.body;
+  const code = customAlphabet("1234567890abcdzABCDZ", 4)();
+  const user = await userModel.findOneAndUpdate({ email }, { sendCode: code }, { new: true });
+  if (!user)
+    return res.status(404).json({ msg: "User not found" });
+  const html = `<h2>The code is ${code}</h2>`;
+  await sendEmail(email, 'Reset Password', html);
+  return res.status(200).json({ msg: "Success", user });
+};
