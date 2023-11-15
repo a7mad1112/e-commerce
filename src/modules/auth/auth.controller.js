@@ -77,3 +77,20 @@ export const sendCode = async (req, res) => {
   await sendEmail(email, 'Reset Password', html);
   return res.status(200).json({ msg: "Success", user });
 };
+
+export const forgotPassword = async (req, res) => {
+  try {
+    const { email, password, code } = req.body;
+    const user = await userModel.findOne({ email });
+    if (!user) return res.status(404).json({ msg: "Email not found" });
+    if (user.sendCode != code) {
+      return res.status(400).json({ msg: "Invalid code" });
+    }
+    user.password = await bcrypt.hash(password, +(process.env.SALT_ROUND));
+    user.sendCode = null;
+    await user.save();
+    return res.status(200).json({ msg: "Success" });
+  } catch (e) {
+    console.log(e.stack)
+  }
+};

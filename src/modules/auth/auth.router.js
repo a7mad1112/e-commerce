@@ -7,5 +7,6 @@ router.post('/signup', fileUpload(fileValidation.image).single('image'), authCon
 router.post('/signin', authController.signin);
 router.get('/confirm-email/:token', authController.confirmEmail);
 router.patch('/send-code', authController.sendCode);
+router.patch('/forgot-password', authController.forgotPassword);
 
 export default router;
