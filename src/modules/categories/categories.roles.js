@@ -1,8 +1,4 @@
-const roles = {
-  Admin: "Admin",
-  User: "User"
-};
-
+import { roles } from "../../roles.js";
 export const endPoints = {
   create: [roles.Admin],
   getAll: [roles.Admin],

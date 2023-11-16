@@ -17,6 +17,9 @@ export const createCategory = async (req, res) => {
   const name = req.body.name.toLowerCase();
   if (await categoryModel.findOne({ name }))
     return res.status(409).json({ msg: "Category name already exists" })
+  if (!req.file) {
+    return res.status(400).json({ msg: "No file provided" });
+  }
   const { secure_url, public_id } = await cloudinary.uploader.upload(req.file.path, {
     folder: `${process.env.APP_NAME}/categories`
   });

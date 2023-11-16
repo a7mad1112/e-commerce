@@ -51,19 +51,23 @@ const productSchema = new Schema({
     default: false,
   },
   createdBy: {
-    type: Types.ObjectId.ref('User'),
+    type: Types.ObjectId,
+    ref: 'User',
     required: true
   },
   updatedBy: {
-    type: Types.ObjectId.ref('User'),
+    type: Types.ObjectId,
+    ref: 'User',
     required: true
   },
-  category: {
-    type: Types.ObjectId.ref('Category'),
+  categoryId: {
+    type: Types.ObjectId,
+    ref: 'Category',
     required: true
   },
-  subCategory: {
-    type: Types.ObjectId.ref('SubCategory'),
+  subCategoryId: {
+    type: Types.ObjectId,
+    ref: 'SubCategory',
     required: true
   },
 }, {
