@@ -8,5 +8,5 @@ export const endPoints = {
   getAll: [roles.Admin],
   getActive: [roles.User],
   update: [roles.Admin],
-  specific: [roles.Admin, roles.User],
+  specific: Object.keys(roles),
 };
