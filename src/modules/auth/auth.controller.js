@@ -4,6 +4,7 @@ import cloudinary from './../../services/cloudinary.js';
 import jwt from "jsonwebtoken";
 import { sendEmail } from "../../services/email.js";
 import { customAlphabet } from 'nanoid'
+import { html } from "../../services/htmlConfirmEmail.js";
 export const signup = async (req, res) => {
   const { body: { userName, email, password }, file } = req;
   const user = await userModel.findOne({ email });
@@ -20,8 +21,7 @@ export const signup = async (req, res) => {
     email
   },
     process.env.EMAIL_SECRET_KEY, { expiresIn: '5m' });
-
-  await sendEmail(email, "Email Confirmation", `<a href='${req.protocol}://${req.headers.host}/auth/confirm-email/${token}'>Hello, confirm your email!</a>`)
+  await sendEmail(email, "Email Confirmation", html(req, token));
 
   const createdUser = await userModel.create({
     userName, email, password: hashedPassword, image: { secure_url, public_id }
