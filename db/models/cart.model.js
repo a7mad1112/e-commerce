@@ -6,27 +6,6 @@ const cartSchema = new Schema({
     required: true,
     ref: "User",
   },
-  slug: {
-    type: String,
-    required: true,
-  },
-  image: {
-    type: Object,
-    required: true,
-  },
-  status: {
-    type: String,
-    default: 'Active',
-    enum: ['Active', 'Inactive']
-  },
-  createdBy: {
-    type: Types.ObjectId,
-    ref: 'User',
-  },
-  updatedBy: {
-    type: Types.ObjectId,
-    ref: 'User',
-  },
   products: [{
     productId: { type: Types.ObjectId, required: true },
     quantity: {
