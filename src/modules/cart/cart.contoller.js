@@ -23,7 +23,7 @@ export const createCart = async (req, res) => {
 
 export const removeItem = async (req, res) => {
   const { productId } = req.body;
-  const cart  = await cartModel.updateOne({ userId: req.user._id }, {
+  const cart = await cartModel.updateOne({ userId: req.user._id }, {
     $pull: {
       products: {
         productId
@@ -31,4 +31,12 @@ export const removeItem = async (req, res) => {
     }
   });
   return res.status(200).json({ msg: "Success", cart });
+}
+
+export const clearCart = async (req, res) => {
+  const clearedCart = await cartModel.updateOne(
+    { userId: req.user._id },
+    { products: [] }
+  );
+  return res.status(200).json({ msg: "Success" });
 }

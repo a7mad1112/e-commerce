@@ -6,4 +6,5 @@ const router = Router();
 
 router.post('/', auth(endPoints.create), cartController.createCart);
 router.patch('/remove-item', auth(endPoints.delete), cartController.removeItem);
+router.patch('/clear', auth(endPoints.clear), cartController.clearCart);
 export default router;
