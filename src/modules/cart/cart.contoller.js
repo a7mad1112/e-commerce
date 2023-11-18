@@ -40,3 +40,8 @@ export const clearCart = async (req, res) => {
   );
   return res.status(200).json({ msg: "Success" });
 }
+
+export const getCart = async (req, res) => {
+  const cart = await cartModel.findOne({ userId: req.user._id });
+  return res.status(200).json({ msg: "Success", cart });
+};
