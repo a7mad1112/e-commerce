@@ -23,12 +23,12 @@ export const createCart = async (req, res) => {
 
 export const removeItem = async (req, res) => {
   const { productId } = req.body;
-  await cartModel.updateOne({ userId: req.user._id }, {
+  const cart  = await cartModel.updateOne({ userId: req.user._id }, {
     $pull: {
       products: {
         productId
       }
     }
   });
-  return res.json({ msg: "here" });
+  return res.status(200).json({ msg: "Success", cart });
 }
