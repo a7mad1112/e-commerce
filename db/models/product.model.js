@@ -50,6 +50,11 @@ const productSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  colors: [String],
+  sizes: [{
+    type: String,
+    enum: ["s", 'm', 'lg', 'xl']
+  }],
   createdBy: {
     type: Types.ObjectId,
     ref: 'User',
