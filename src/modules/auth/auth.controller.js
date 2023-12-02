@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import { sendEmail } from "../../services/email.js";
 import { customAlphabet } from 'nanoid'
 import { html } from "../../services/htmlConfirmEmail.js";
-export const signup = async (req, res) => {
+export const signup = async (req, res, next) => {
   const { body: { userName, email, password }, file } = req;
   const user = await userModel.findOne({ email });
   if (user) {
