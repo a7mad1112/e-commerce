@@ -1,8 +1,9 @@
 import couponModel from './../../../db/models/coupon.model.js';
 export const createCoupon = async (req, res) => {
   const { name } = req.body;
-  if (await couponModel.findOne({ name }))
-    return res.status(409).json({ msg: "Coupon name already exist" })
+  if (await couponModel.findOne({ name })) {
+    return next(new Error(`Coupon name already exist`, { cause: 409 }));
+  }
   const coupon = await couponModel.create(req.body);
   return res.status(201).json({ msg: "Success", coupon });
 };
@@ -14,11 +15,11 @@ export const updateCoupon = async (req, res) => {
   const { params: { id }, body: { name, amount } } = req;
   const coupon = await couponModel.findById(id);
   if (!coupon) {
-    return res.status(404).json({ msg: "Coupon not found" });
+    return next(new Error(`Coupon not found`, { cause: 404 }));
   }
   if (name) {
     if (await couponModel.findOne({ name }).select('name')) {
-      return res.status(409).json({ msg: "Name already exists" });
+      return next(new Error(`Name already exists`, { cause: 409 }));
     }
     coupon.name = name;
   }
@@ -37,7 +38,7 @@ export const softDelete = async (req, res) => {
     },
     { new: true });
   if (!coupon) {
-    return res.status(400).json({ msg: "Cannot delete this coupon" });
+    return next(new Error(`Cannot delete this coupon`, { cause: 400 }));
   }
   return res.status(200).json({ msg: "Success" });
 }
@@ -49,7 +50,7 @@ export const restore = async (req, res) => {
     },
     { new: true });
   if (!coupon) {
-    return res.status(400).json({ msg: "Cannot restore this coupon" });
+    return next(new Error(`Cannot restore this coupon`, { cause: 400 }));
   }
   return res.status(200).json({ msg: "Success" });
 }
@@ -57,7 +58,7 @@ export const hardDelete = async (req, res) => {
   const { id: _id } = req.params;
   const coupon = await couponModel.findOneAndDelete({ _id })
   if (!coupon) {
-    return res.status(400).json({ msg: "Cannot delete this coupon" });
+    return next(new Error(`Cannot delete this coupon`, { cause: 400 }));
   }
   return res.status(200).json({ msg: "Success" });
 }

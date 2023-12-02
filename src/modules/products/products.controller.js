@@ -19,10 +19,10 @@ export const createProduct = async (req, res) => {
   } = req;
   const { APP_NAME } = process.env;
   if (!await categoryModel.findById(categoryId)) {
-    return res.status(404).json({ msg: "Category not found" });
+    return next(new Error(`Category not found`, { cause: 404 }));
   }
   if (!await subCategoryModel.findById(subCategoryId)) {
-    return res.status(404).json({ msg: "Sub-category not found" });
+    return next(new Error(`Sub-category not found`, { cause: 404 }));
   }
   req.body.slug = slugify(name);
   req.body.finalPrice = price - (price * discount / 100);
@@ -40,7 +40,7 @@ export const createProduct = async (req, res) => {
   req.body.updatedBy = req.user._id;
   const product = await productModel.create(req.body);
   if (!product) {
-    return res.status(400).json({ msg: "Error while creating product" });
+    return next(new Error(`Error while creating product`, { cause: 400 }));
   }
   return res.status(201).json({ msg: "Success", product });
 };

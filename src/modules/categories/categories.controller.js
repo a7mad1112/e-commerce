@@ -15,10 +15,11 @@ export const getSpecficCategory = async (req, res) => {
 
 export const createCategory = async (req, res) => {
   const name = req.body.name.toLowerCase();
-  if (await categoryModel.findOne({ name }))
-    return res.status(409).json({ msg: "Category name already exists" })
+  if (await categoryModel.findOne({ name })) {
+    return next(new Error("Category name already exists", { cause: 409 }));
+  }
   if (!req.file) {
-    return res.status(400).json({ msg: "No file provided" });
+    return next(new Error("No file provided", { cause: 400 }));
   }
   const { secure_url, public_id } = await cloudinary.uploader.upload(req.file.path, {
     folder: `${process.env.APP_NAME}/categories`
@@ -38,11 +39,11 @@ export const updateCategory = async (req, res) => {
   const { file, body: { status, name }, } = req;
   const category = await categoryModel.findById(id)
   if (!category) {
-    return res.status(404).json({ msg: 'Invalid category id' })
+    return next(new Error("Invalid category id", { cause: 404 }));
   }
   if (name) {
     if (await categoryModel.findOne({ name }).select('name')) {
-      return res.status(409).json({ msg: `Category ${name} already exsist` })
+      return next(new Error(`Category ${name} already exsist`, { cause: 409 }));
     }
     category.name = name;
     category.slug = slugify(name);
@@ -66,5 +67,4 @@ export const updateCategory = async (req, res) => {
 export const getActiveCategories = async (req, res) => {
   const categories = await categoryModel.find({ status: "Active" }).select('name image');
   return res.status(200).json({ msg: 'Success', categories });
-  // return res.json("here")
 }

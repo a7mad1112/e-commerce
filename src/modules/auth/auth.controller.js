@@ -9,7 +9,7 @@ export const signup = async (req, res, next) => {
   const { body: { userName, email, password }, file } = req;
   const user = await userModel.findOne({ email });
   if (user) {
-    return res.status(409).json({ msg: "Email already exists" });
+    return next(new Error("Email already exists", { cause: 409 }));
   }
   const hashedPassword = await bcrypt.hash(password, +process.env.SALT_ROUND);
 
@@ -33,15 +33,15 @@ export const signin = async (req, res) => {
   const { body: { email, password } } = req;
   const user = await userModel.findOne({ email });
   if (!user) {
-    return res.status(404).json({ msg: "User not found" });
+    return next(new Error("User not found", { cause: 404 }));
   }
   if (!user.confirmEmail) {
-    return res.status(400).json({ msg: "Please confirm your email" });
+    return next(new Error("Please confirm your email", { cause: 400 }));
   }
   const match = await bcrypt.compare(password, user.password);
 
   if (!match) {
-    return res.status(404).json({ msg: "User not found" });
+    return next(new Error("User not found", { cause: 404 }));
   }
 
   const token = jwt.sign({
@@ -60,12 +60,12 @@ export const confirmEmail = async (req, res) => {
   const { token } = req.params;
   const decoded = jwt.verify(token, process.env.EMAIL_SECRET_KEY);
   if (!decoded) {
-    return res.status(404).json({ msg: "Invalid token" })
+    return next(new Error("Invalid token", { cause: 404 }));
   }
   const user = await userModel.findOneAndUpdate({ email: decoded.email, confirmEmail: false },
     { confirmEmail: true });
   if (!user) {
-    return res.status(400).json({ msg: "Invalid verify your email" })
+    return next(new Error("Invalid verify your email", { cause: 400 }));
   }
   return res.status(200).json({ msg: "Your email is verified" })
 }
@@ -74,8 +74,9 @@ export const sendCode = async (req, res) => {
   const { email } = req.body;
   const code = customAlphabet("1234567890abcdzABCDZ", 4)();
   const user = await userModel.findOneAndUpdate({ email }, { sendCode: code }, { new: true });
-  if (!user)
-    return res.status(404).json({ msg: "User not found" });
+  if (!user) {
+    return next(new Error("User not found", { cause: 404 }));
+  }
   const html = `<h2>The code is ${code}</h2>`;
   await sendEmail(email, 'Reset Password', html);
   return res.status(200).json({ msg: "Success", user });
@@ -84,13 +85,14 @@ export const sendCode = async (req, res) => {
 export const forgotPassword = async (req, res) => {
   const { email, password, code } = req.body;
   const user = await userModel.findOne({ email });
-  if (!user) return res.status(404).json({ msg: "Email not found" });
+  if (!user) {
+    return next(new Error("Email not found", { cause: 404 }));
+  }
   if (user.sendCode != code) {
-    return res.status(400).json({ msg: "Invalid code" });
+    return next(new Error("Invalid code", { cause: 400 }));
   }
   user.password = await bcrypt.hash(password, +(process.env.SALT_ROUND));
   user.sendCode = null;
   await user.save();
   return res.status(200).json({ msg: "Success" });
-  console.log(e.stack)
 };

@@ -6,11 +6,11 @@ export const createSubCategory = async (req, res) => {
   const { name, categoryId } = req.body;
   const subcategory = await subCategoryModel.findOne({ name });
   if (subcategory) {
-    return res.status(409).json({ msg: "Sub Category  " + name + " already exist" });
+    return next(new Error("Sub Category  " + name + " already exist", { cause: 409 }));
   }
   const category = await categoryModel.findById(categoryId);
   if (!category) {
-    return res.status(404).json({ msg: "Category not found" });
+    return next(new Error(`Category not found`, { cause: 404 }));
   }
   console.log(req.file)
   const { secure_url, public_id } = await cloudinary.uploader.upload(req.file.path, {
@@ -24,7 +24,7 @@ export const getSubCategories = async (req, res) => {
   const categoryId = req.params.id;
   const category = await categoryModel.findById(categoryId);
   if (!category) {
-    return res.status(404).json({ msg: "Category not found" });
+    return next(new Error(`Category not found`, { cause: 404 }));
   }
   const subCategories = await subCategoryModel.find({ categoryId }).populate({
     path: 'categoryId'
