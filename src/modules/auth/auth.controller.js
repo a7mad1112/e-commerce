@@ -35,6 +35,9 @@ export const signin = async (req, res) => {
   if (!user) {
     return res.status(404).json({ msg: "User not found" });
   }
+  if (!user.confirmEmail) {
+    return res.status(400).json({ msg: "Please confirm your email" });
+  }
   const match = await bcrypt.compare(password, user.password);
 
   if (!match) {
