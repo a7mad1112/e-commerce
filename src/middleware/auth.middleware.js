@@ -21,11 +21,15 @@ export const auth = (accessRoles = []) => {
         return res.status(400).json({ msg: "Invalid authorization token" });
       }
 
-      const user = await userModel.findById(decoded.id);
+      const user = await userModel.findById(decoded.id)
+        .select("userName role changePasswordTime");
       if (!user) {
         return res.status(404).json({ msg: "User not found" });
       }
 
+      if (parseInt(user.changePasswordTime.getTime() / 1000) > decoded.iat) {
+        return next(new Error(`Expired token, please login again`, { cause: 400 }));
+      }
       if (!accessRoles.includes(decoded.role)) {
         return res.status(403).json({ msg: "Not authorized to access this resource" });
       }
