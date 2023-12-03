@@ -28,7 +28,6 @@ export const validation = (schema) => {
     }
     const validationResult = schema.validate(inputsData, { abortEarly: false });
     if (validationResult.error?.details) {
-      console.log(validationResult.error.details[0].message)
       return next(new Error(validationResult.error.details[0].message, { cause: 404 }));
     }
     next();

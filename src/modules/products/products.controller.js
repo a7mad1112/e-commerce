@@ -25,7 +25,7 @@ export const createProduct = async (req, res) => {
     return next(new Error(`Sub-category not found`, { cause: 404 }));
   }
   req.body.slug = slugify(name);
-  req.body.finalPrice = price - (price * discount / 100);
+  req.body.finalPrice = (price - (price * discount / 100)).toFixed(2);
 
   const { secure_url, public_id } = await cloudinary.uploader.upload(mainImage[0].path,
     { folder: `${APP_NAME}/product/${name}/main-image` });

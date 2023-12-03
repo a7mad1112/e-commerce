@@ -12,7 +12,7 @@ export const createSubCategory = async (req, res) => {
   if (!category) {
     return next(new Error(`Category not found`, { cause: 404 }));
   }
-  console.log(req.file)
+  (req.file)
   const { secure_url, public_id } = await cloudinary.uploader.upload(req.file.path, {
     folder: `${process.env.APP_NAME}/sub-categories`
   });
