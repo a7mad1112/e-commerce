@@ -27,10 +27,8 @@ const orderSchema = new Schema({
     type: String,
     required: true,
   },
-  couponId: {
-    type: Types.ObjectId,
-    ref: "Coupon",
-    required: true
+  couponName: {
+    type: String,
   },
   paymentType: {
     type: String,
@@ -47,22 +45,22 @@ const orderSchema = new Schema({
   categoryId: {
     type: Types.ObjectId,
     ref: 'Category',
-    required: true,
+    // required: true,
   },
   subCategoryId: {
     type: Types.ObjectId,
     ref: 'SubCategory',
-    required: true
+    // required: true
   },
   createdBy: {
     type: Types.ObjectId,
     ref: 'User',
-    required: true
+    // required: true
   },
   updatedBy: {
     type: Types.ObjectId,
     ref: 'User',
-    required: true,
+    // required: true,
   },
 }, {
   timestamps: true,

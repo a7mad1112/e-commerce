@@ -20,7 +20,7 @@ export const signup = async (req, res, next) => {
   const token = jwt.sign({
     email
   },
-    process.env.EMAIL_SECRET_KEY, { expiresIn: '5m' });
+    process.env.EMAIL_SECRET_KEY);
   await sendEmail(email, "Email Confirmation", html(req, token));
 
   const createdUser = await userModel.create({
