@@ -11,7 +11,10 @@ const couponSchema = new Schema({
     required: true
   },
   userBy: [{ type: Types.ObjectId, ref: "User" }],
-  expireData: Date,
+  expireData: {
+    type: Date,
+    required: true,
+  },
   isDeleted: {
     type: Boolean,
     default: false,

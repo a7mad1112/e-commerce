@@ -1,9 +1,11 @@
 import { Router } from 'express'
 import * as couponController from './coupon.controller.js'
 import { asyncHandler } from '../../services/errorHandler.js';
+import * as validators from './coupon.validation.js';
+import { validation } from '../../middleware/validation.js';
 const router = Router();
 
-router.post('/', asyncHandler(couponController.createCoupon));
+router.post('/', validation(validators.createCoupon), asyncHandler(couponController.createCoupon));
 router.get('/', asyncHandler(couponController.getCoupons));
 router.put('/:id', asyncHandler(couponController.updateCoupon));
 router.patch('/soft-delete/:id', asyncHandler(couponController.softDelete));

@@ -13,7 +13,7 @@ const orderSchema = new Schema({
     },
     quantity: { type: Number, default: 1, required: true },
     unitPrice: { type: Number, required: true },
-    finalPrice: {}
+    finalPrice: { type: Number, required: true },
   }],
   finalPrice: {
     type: Number,
@@ -28,7 +28,8 @@ const orderSchema = new Schema({
     required: true,
   },
   couponId: {
-    type: Number,
+    type: Types.ObjectId,
+    ref: "Coupon",
     required: true
   },
   paymentType: {
@@ -42,10 +43,11 @@ const orderSchema = new Schema({
     enum: ['pending', 'cancelled', 'confirmed', 'onWay', 'deliverd'],
   },
   reasonRejected: String,
+  note: String,
   categoryId: {
     type: Types.ObjectId,
     ref: 'Category',
-    required: true
+    required: true,
   },
   subCategoryId: {
     type: Types.ObjectId,
