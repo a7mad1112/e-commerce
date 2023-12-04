@@ -17,4 +17,5 @@ router.post('/', auth(endPoints.create),
   validation(validators.createProduct),
   asyncHandler(productsController.createProduct));
 router.get('/category/:categoryId', productsController.getProductsWithCategory);
+router.get('/:productId', productsController.getProductById);
 export default router;

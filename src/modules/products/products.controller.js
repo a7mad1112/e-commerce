@@ -50,3 +50,7 @@ export const getProductsWithCategory = async (req, res) => {
   return res.status(200).json({ msg: "Success", products });
 };
 
+export const getProductById = async (req, res) => {
+  const product = await productModel.findById(req.params.productId);
+  return res.json({ msg: "Success", product });
+};
