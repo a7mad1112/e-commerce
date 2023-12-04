@@ -8,7 +8,7 @@ import * as validators from './product.validation.js';
 import { validation } from '../../middleware/validation.js';
 const router = Router();
 
-router.get('/', asyncHandler(productsController.getProducst));
+router.get('/', asyncHandler(productsController.getProducts));
 router.post('/', auth(endPoints.create),
   fileUpload(fileValidation.image).fields([
     { name: 'mainImage', maxCount: 1 },
@@ -16,5 +16,5 @@ router.post('/', auth(endPoints.create),
   ]),
   validation(validators.createProduct),
   asyncHandler(productsController.createProduct));
-
+router.get('/category/:categoryId', productsController.getProductsWithCategory);
 export default router;

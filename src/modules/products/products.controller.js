@@ -3,7 +3,7 @@ import categoryModel from './../../../db/models/category.model.js';
 import subCategoryModel from './../../../db/models/subcategory.model.js';
 import cloudinary from './../../services/cloudinary.js';
 import productModel from '../../../db/models/product.model.js';
-export const getProducst = (req, res) => {
+export const getProducts = (req, res) => {
   return res.json("products")
 }
 
@@ -44,3 +44,9 @@ export const createProduct = async (req, res) => {
   }
   return res.status(201).json({ msg: "Success", product });
 };
+
+export const getProductsWithCategory = async (req, res) => {
+  const products = await productModel.find({ categoryId: req.params.categoryId });
+  return res.status(200).json({ msg: "Success", products });
+};
+
