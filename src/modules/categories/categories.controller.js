@@ -12,9 +12,12 @@ export const getCategories = async (req, res) => {
   return res.status(200).json({ msg: 'Success', categories });
 };
 
-export const getSpecficCategory = async (req, res) => {
+export const getSpecficCategory = async (req, res, next) => {
   const { id } = req.params;
   const category = await categoryModel.findById(id);
+  if (!category) {
+    return next(new Error("Category not found", { cause: 404 }));
+  }
   return res.json({ msg: "Success", category });
 };
 
