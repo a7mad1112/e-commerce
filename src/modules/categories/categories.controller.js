@@ -21,7 +21,7 @@ export const getSpecficCategory = async (req, res, next) => {
   return res.json({ msg: "Success", category });
 };
 
-export const createCategory = async (req, res) => {
+export const createCategory = async (req, res, next) => {
   const name = req.body.name.toLowerCase();
   if (await categoryModel.findOne({ name })) {
     return next(new Error("Category name already exists", { cause: 409 }));
@@ -42,7 +42,7 @@ export const createCategory = async (req, res) => {
   return res.status(201).json({ msg: 'Success', category: category });
 };
 
-export const updateCategory = async (req, res) => {
+export const updateCategory = async (req, res, next) => {
   const { id } = req.params;
   const { file, body: { status, name }, } = req;
   const category = await categoryModel.findById(id)
@@ -50,7 +50,7 @@ export const updateCategory = async (req, res) => {
     return next(new Error("Invalid category id", { cause: 404 }));
   }
   if (name) {
-    if (await categoryModel.findOne({ name }).select('name')) {
+    if (await categoryModel.findOne({ name, _id: { $ne: category._id } }).select('name')) {
       return next(new Error(`Category ${name} already exsist`, { cause: 409 }));
     }
     category.name = name;
@@ -73,14 +73,10 @@ export const updateCategory = async (req, res) => {
 }
 
 export const getActiveCategories = async (req, res) => {
-  try {
-    const { limit, skip } = pagination(req.query.page, req.query.limit);
-    const categories = await categoryModel.find({ status: "Active" })
-      .skip(+skip)
-      .limit(+limit)
-      .select('name image');
-    return res.status(200).json({ count: categories.length, msg: 'Success', categories, });
-  } catch ({ stack }) {
-    return res.json(stack);
-  }
+  const { limit, skip } = pagination(req.query.page, req.query.limit);
+  const categories = await categoryModel.find({ status: "Active" })
+    .skip(+skip)
+    .limit(+limit)
+    .select('name image');
+  return res.status(200).json({ count: categories.length, msg: 'Success', categories, });
 }
