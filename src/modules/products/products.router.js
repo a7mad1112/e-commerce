@@ -2,8 +2,8 @@ import { Router } from 'express'
 import * as productsController from './products.controller.js'
 import { auth } from '../../middleware/auth.middleware.js';
 import { endPoints } from './products.roles.js';
-import fileUpload, { fileValidation } from '../../services/multer.js';
-import { asyncHandler } from './../../services/errorHandler.js';
+import fileUpload, { fileValidation } from '../../utils/multer.js';
+import { asyncHandler } from './../../utils/errorHandler.js';
 import * as validators from './product.validation.js';
 import { validation } from '../../middleware/validation.js';
 const router = Router();

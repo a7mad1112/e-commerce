@@ -1,7 +1,7 @@
 import slugify from 'slugify';
 import categoryModel from './../../../db/models/category.model.js';
 import subCategoryModel from './../../../db/models/subcategory.model.js';
-import cloudinary from './../../services/cloudinary.js';
+import cloudinary from './../../utils/cloudinary.js';
 import productModel from '../../../db/models/product.model.js';
 export const getProducts = (req, res) => {
   return res.json("products")

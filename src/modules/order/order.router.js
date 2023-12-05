@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import * as orderController from './order.controller.js'
-import { asyncHandler } from '../../services/errorHandler.js';
+import { asyncHandler } from '../../utils/errorHandler.js';
 import * as validators from './order.validation.js';
 import { validation } from '../../middleware/validation.js';
 import { auth } from '../../middleware/auth.middleware.js';

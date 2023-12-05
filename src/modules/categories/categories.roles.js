@@ -1,6 +1,6 @@
 import { roles } from "../../roles.js";
 export const endPoints = {
   create: [roles.Admin],
-  getAll: Object.values(roles),
+  getAll: [roles.Admin],
   update: [roles.Admin],
 };

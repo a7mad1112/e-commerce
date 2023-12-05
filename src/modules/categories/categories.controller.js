@@ -1,6 +1,7 @@
 import slugify from 'slugify';
-import cloudinary from '../../services/cloudinary.js'
+import cloudinary from '../../utils/cloudinary.js'
 import categoryModel from '../../../db/models/category.model.js';
+import { pagination } from './../../utils/pagination.js';
 
 export const getCategories = async (req, res) => {
   const categories = await categoryModel.find().populate('SubCategory');
@@ -65,6 +66,14 @@ export const updateCategory = async (req, res) => {
 }
 
 export const getActiveCategories = async (req, res) => {
-  const categories = await categoryModel.find({ status: "Active" }).select('name image');
-  return res.status(200).json({ msg: 'Success', categories });
+  try {
+    const { limit, skip } = pagination(req.query.page, req.query.limit);
+    const categories = await categoryModel.find({ status: "Active" })
+      .skip(+skip)
+      .limit(+limit)
+      .select('name image');
+    return res.status(200).json({ count: categories.length, msg: 'Success', categories, });
+  } catch ({ stack }) {
+    return res.json(stack);
+  }
 }

@@ -1,10 +1,10 @@
 import userModel from "../../../db/models/user.model.js";
 import bcrypt from 'bcryptjs';
-import cloudinary from './../../services/cloudinary.js';
+import cloudinary from './../../utils/cloudinary.js';
 import jwt from "jsonwebtoken";
-import { sendEmail } from "../../services/email.js";
+import { sendEmail } from "../../utils/email.js";
 import { customAlphabet } from 'nanoid'
-import { html } from "../../services/htmlConfirmEmail.js";
+import { html } from "../../utils/htmlConfirmEmail.js";
 export const signup = async (req, res, next) => {
   const { body: { userName, email, password }, file } = req;
   const user = await userModel.findOne({ email });

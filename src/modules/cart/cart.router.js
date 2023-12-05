@@ -2,7 +2,7 @@ import { Router } from "express";
 import * as cartController from './cart.contoller.js';
 import { auth } from "../../middleware/auth.middleware.js";
 import { endPoints } from "./cart.roles.js";
-import { asyncHandler } from "../../services/errorHandler.js";
+import { asyncHandler } from "../../utils/errorHandler.js";
 const router = Router();
 
 router.post('/', auth(endPoints.create), asyncHandler(cartController.createCart));

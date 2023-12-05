@@ -6,7 +6,7 @@ import subCategoryRouter from './subcategory/subcategory.router.js'
 import couponRouter from './coupon/coupon.router.js'
 import cartRouter from '../modules/cart/cart.router.js'
 import orderRouter from '../modules/order/order.router.js'
-import { globalErrorHandler } from '../services/errorHandler.js'
+import { globalErrorHandler } from '../utils/errorHandler.js'
 const initApp = async (app, express) => {
   connectDB()
   app.use(express.json())
