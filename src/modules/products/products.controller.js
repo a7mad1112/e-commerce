@@ -3,8 +3,13 @@ import categoryModel from './../../../db/models/category.model.js';
 import subCategoryModel from './../../../db/models/subcategory.model.js';
 import cloudinary from './../../utils/cloudinary.js';
 import productModel from '../../../db/models/product.model.js';
-export const getProducts = (req, res) => {
-  return res.json("products")
+import { pagination } from './../../utils/pagination.js';
+export const getProducts = async (req, res) => {
+  const { skip, limit } = pagination(req.query.page, req.query.limit);
+  const products = await productModel.find({})
+    .skip(skip)
+    .limit(limit);
+  return res.json({ msg: "Success", products })
 }
 
 export const createProduct = async (req, res) => {
