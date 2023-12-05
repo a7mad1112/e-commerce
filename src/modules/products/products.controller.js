@@ -21,7 +21,7 @@ export const createProduct = async (req, res) => {
   if (!await categoryModel.findById(categoryId)) {
     return next(new Error(`Category not found`, { cause: 404 }));
   }
-  if (!await subCategoryModel.findById(subCategoryId)) {
+  if (subCategoryId && !await subCategoryModel.findById(subCategoryId)) {
     return next(new Error(`Sub-category not found`, { cause: 404 }));
   }
   req.body.slug = slugify(name);

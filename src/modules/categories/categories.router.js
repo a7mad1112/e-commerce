@@ -18,4 +18,5 @@ router.get('/active', asyncHandler(categoriesContoller.getActiveCategories));
 router.get('/:id', asyncHandler(categoriesContoller.getSpecficCategory));
 router.put('/:id', auth(endPoints.update), fileUpload(fileValidation.image).single('image'),
   asyncHandler(categoriesContoller.updateCategory));
+router.delete('/:categoryId', auth(endPoints.delete), asyncHandler(categoriesContoller.deleteCategory));
 export default router;

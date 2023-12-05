@@ -73,7 +73,6 @@ const productSchema = new Schema({
   subCategoryId: {
     type: Types.ObjectId,
     ref: 'SubCategory',
-    required: true
   },
 }, {
   timestamps: true,

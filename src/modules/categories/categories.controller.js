@@ -2,6 +2,7 @@ import slugify from 'slugify';
 import cloudinary from '../../utils/cloudinary.js'
 import categoryModel from '../../../db/models/category.model.js';
 import { pagination } from './../../utils/pagination.js';
+import productModel from '../../../db/models/product.model.js';
 
 export const getCategories = async (req, res) => {
   const { limit, skip } = pagination(req.query.page, req.query.limit);
@@ -79,4 +80,14 @@ export const getActiveCategories = async (req, res) => {
     .limit(+limit)
     .select('name image');
   return res.status(200).json({ count: categories.length, msg: 'Success', categories, });
+}
+
+export const deleteCategory = async (req, res, next) => {
+  const { categoryId } = req.params;
+  const category = await categoryModel.findByIdAndDelete(categoryId);
+  if (!category) {
+    return next(new Error("Category not found", { cause: 404 }));
+  }
+  await productModel.deleteMany({ categoryId });
+  return res.status(200).json({ msg: "Success", category });
 }

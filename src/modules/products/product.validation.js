@@ -13,5 +13,5 @@ export const createProduct = joi.object({
   }),
   status: joi.string().valid('Active', 'Inactive'),
   categoryId: joi.string().required(),
-  subCategoryId: joi.string().required(),
+  subCategoryId: joi.string(),
 }).required();
