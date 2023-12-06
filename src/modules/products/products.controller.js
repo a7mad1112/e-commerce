@@ -7,7 +7,7 @@ import { pagination } from './../../utils/pagination.js';
 export const getProducts = async (req, res) => {
   const { skip, limit } = pagination(req.query.page, req.query.limit);
   let queryObj = { ...req.query };
-  const execQuery = ['page', 'limit', 'skip', 'sort'];
+  const execQuery = ['page', 'limit', 'skip', 'sort', 'search', ''];
   execQuery.forEach((ele) => {
     delete queryObj[ele];
   });
@@ -18,6 +18,17 @@ export const getProducts = async (req, res) => {
     .find(queryObj)
     .skip(skip)
     .limit(limit);
+  if (req.query.search) {
+    mongooseQuery.find({
+      $or: [
+        { name: { $regex: req.query.search, $options: 'i' }, },
+        { description: { $regex: req.query.search, $options: 'i' }, }
+      ],
+    });
+  }
+  if (req.query.fields) {
+    mongooseQuery.select(req.query.fields.replaceAll(',', ' '));
+  }
   const products = await mongooseQuery.sort(req.query.sort?.replaceAll(',', ' '));
   const total = await productModel.estimatedDocumentCount();
   return res.json({ msg: "Success", page: products.length, total, products });
