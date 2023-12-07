@@ -97,3 +97,24 @@ export const getOrders = async (req, res) => {
   const orders = await orderModel.find({ userId: req.user._id });
   return res.status(200).json({ msg: "Success", orders });
 }
+
+export const changeStatus = async (req, res, next) => {
+  const { orderId } = req.params;
+  const order = await orderModel.findById(orderId);
+  if (!order) {
+    return next(new Error(`Order not found`, { cause: 404 }));
+  }
+  if (order.status === 'cancelled' || order.status === 'deliverd') {
+    return next(new Error(`Cannot cancel this order`));
+  }
+  const cancelledOrder = await orderModel.findByIdAndUpdate(orderId, { status: req.body.status }, { new: true });
+  if (req.body.status === "cancelled") {
+    for (const product of cancelledOrder.products) {
+      await productModel.updateOne({ _id: product.productId }, { $inc: { stack: product.quantity } })
+    }
+    if (cancelledOrder.couponName) {
+      await couponModel.updateOne({ _id: req.body.couponName._id }, { $pull: { usedBy: cancelledOrder.userId } });
+    }
+  }
+  return res.json({ msg: "Success", order: cancelledOrder });
+};

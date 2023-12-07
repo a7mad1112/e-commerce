@@ -12,4 +12,5 @@ router.patch('/cancel-order/:orderId', auth(endPoints.cancel),
   asyncHandler(orderController.candelOrder));
 router.get('/', auth(endPoints.getOrders),
   asyncHandler(orderController.getOrders));
+router.patch('/change-status/:orderId', auth(endPoints.changeStatus), asyncHandler(orderController.changeStatus))
 export default router;
