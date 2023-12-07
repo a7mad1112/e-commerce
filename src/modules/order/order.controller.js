@@ -71,3 +71,18 @@ export const createOrder = async (req, res, next) => {
   await cartModel.updateOne({ userId: req.user._id }, { products: [] });
   return res.status(201).json({ msg: "Success", order });
 };
+
+export const candelOrder = async (req, res, next) => {
+  const { orderId } = req.params;
+  const order = await orderModel.findOne({ _id: orderId, userId: req.user._id });
+  if (!order) {
+    return next(new Error(`Order not found`, { cause: 404 }));
+  }
+  if (order.status != 'pending') {
+    return next(new Error(`Cannot cancelled this order`, { cause: 400 }));
+  }
+  req.body.status = 'cancelled';
+  req.body.updatedBy = req.user._id;
+  const cancelledOrder = await orderModel.findByIdAndUpdate(orderId, req.body, { new: true });
+  return res.status(200).json({ msg: "Success", order: cancelledOrder });
+};
