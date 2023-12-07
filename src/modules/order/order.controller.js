@@ -92,3 +92,8 @@ export const candelOrder = async (req, res, next) => {
   }
   return res.status(200).json({ msg: "Success", order: cancelledOrder });
 };
+
+export const getOrders = async (req, res) => {
+  const orders = await orderModel.find({ userId: req.user._id });
+  return res.status(200).json({ msg: "Success", orders });
+}
