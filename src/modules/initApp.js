@@ -7,6 +7,7 @@ import couponRouter from './coupon/coupon.router.js'
 import cartRouter from '../modules/cart/cart.router.js'
 import orderRouter from '../modules/order/order.router.js'
 import { globalErrorHandler } from '../utils/errorHandler.js'
+import userRouter from '../modules/user/user.router.js';
 const initApp = async (app, express) => {
   connectDB()
   app.use(express.json())
@@ -17,6 +18,7 @@ const initApp = async (app, express) => {
   app.use('/coupon', couponRouter)
   app.use('/cart', cartRouter);
   app.use('/order', orderRouter);
+  app.use('/user', userRouter);
   app.use('*', (req, res) => res.status(404).json({ msg: "page not found" }))
   app.use(globalErrorHandler)
 }
