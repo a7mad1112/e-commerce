@@ -84,5 +84,11 @@ export const candelOrder = async (req, res, next) => {
   req.body.status = 'cancelled';
   req.body.updatedBy = req.user._id;
   const cancelledOrder = await orderModel.findByIdAndUpdate(orderId, req.body, { new: true });
+  for (const product of cancelledOrder.products) {
+    await productModel.updateOne({ _id: product.productId }, { $inc: { stack: product.quantity } })
+  }
+  if (req.body.couponName) {
+    await couponModel.updateOne({ _id: req.body.couponName._id }, { $pull: { usedBy: req.user._id } });
+  }
   return res.status(200).json({ msg: "Success", order: cancelledOrder });
 };
